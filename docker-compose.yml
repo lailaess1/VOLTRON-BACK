@@ -1,0 +1,42 @@
+services:
+  app_back:
+    container_name: voltron-back
+    build: ./config/BACK/Docker
+    volumes:
+      - ~/Bureau/VOLTRON/VOLTRON-BACK:/back
+    # command: tail -F anything
+    networks:
+      network:
+        ipv4_address: 10.6.0.5
+
+  app_sql:
+    container_name: voltron-sql
+    build: ./config/SQL/Docker
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: VOLTRONDB
+      MYSQL_USER: laila
+      MYSQL_PASSWORD: root
+    networks:
+      network:
+        ipv4_address: 10.6.0.6
+        
+  app_front:
+    container_name: voltron-front
+    build: ../app_front/Docker
+    volumes:
+      - ~/Bureau/VOLTRON/VOLTRON-FRONT:/front
+    # command: tail -F anything
+    networks:
+      network:
+        ipv4_address: 10.6.0.7
+
+
+networks:
+  network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.6.0.0/24
+          gateway: 10.6.0.1
+
